@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Semillas de Futuros, Cultura de Esperanza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Estilos generales permanecen sin cambios */
+    html {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: #400957;
+      color: #fff;
+      font-family: 'Trebuchet MS', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+    }
+    .game-section {
+      background: linear-gradient(135deg, #400957 0%, #a311ff 100%);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin-top: 32px;
+      margin-bottom: 24px;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 12px #000a;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ffb397 0%, #ff4100 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card-slot {
+      width: 220px;
+      height: 160px;
+      perspective: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #0006;
+      background: linear-gradient(135deg, #400957 0%, #6a0dad 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2.5px dashed #fff5;
+      transition: transform 0.7s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+      backface-visibility: hidden;
+      position: relative;
+      min-height: 140px;
+    }
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+      box-shadow: 0 8px 32px #000a;
+    }
+    .card-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.2em;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      opacity: 0.85;
+    }
+    .card-secondary {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #ccc;
+      margin-bottom: 0.8em;
+      text-align: center;
+      opacity: 0.75;
+    }
+    .card-content {
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 0.2em;
+      min-height: 2.5em;
+      color: #fff;
+      text-shadow: 0 2px 8px #000a;
+      word-break: break-word;
+      transition: color 0.2s;
+    }
+    .count-remaining {
+      margin-top: 0.5em;
+      font-size: 0.98rem;
+      color: #fff9;
+      text-align: center;
+      min-height: 1.2em;
+      letter-spacing: 0.5px;
+    }
+    /* Category colors */
+    .border-green { border-color: #d281ff; }
+    .border-red { border-color: #ff4100; }
+    .border-blue { border-color: #a311ff; }
+    .border-yellow { border-color: #ffb397; }
+    .label-green { color: #d281ff; }
+    .label-red { color: #ff4100; }
+    .label-blue { color: #a311ff; }
+    .label-yellow { color: #ffb397; }
+    /* Button and select */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2em;
+      margin-bottom: 2.5em;
+    }
+    select {
+      padding: 0.7em 1.2em;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.1rem;
+      background: #400957;
+      color: #fff;
+      box-shadow: 0 2px 8px #0004;
+      outline: none;
+      margin-bottom: 0.5em;
+      transition: background 0.2s;
+    }
+    select:focus {
+      background: #c54eff;
+    }
+    button {
+      padding: 0.9em 2.5em;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ff8e62 0%, #ff4100 100%);
+      color: #400957;
+      box-shadow: 0 4px 16px #0005;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    button:hover, button:focus {
+      background: linear-gradient(90deg, #ff4100 0%, #ff8e62 100%);
+      color: #400957;
+      box-shadow: 0 6px 24px #0007;
+    }
+    .explanations-title {
+      color: #d281ff;
+      font-size: 1.4rem;
+      text-align: center;
+      margin: 2em 0 0.5em;
+      max-width: 900px;
+      width: 90%;
+    }
+    .explanations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 900px;
+      width: 90%;
+      margin: 1.5em auto 3em;
+    }
+    .explanation-card {
+      background: #a311ff66;
+      border: 1px solid rgba(210, 129, 255, 0.25);
+      border-radius: 14px;
+      padding: 1.2em 1.4em;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .explanation-card h3 {
+      margin: 0 0 0.4em 0;
+      font-size: 1.15rem;
+      color: #d281ff;
+    }
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      padding: 1.5em 0 2.5em;
+    }
+    footer a {
+      display: inline-flex;
+      transition: opacity 0.2s;
+    }
+    footer a:hover {
+      opacity: 0.75;
+    }
+    footer img {
+      height: 60px;
+      width: auto;
+    }
+    .instructions, .attribution {
+      max-width: 700px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 1.5em;
+      background: rgba(163, 17, 255, 0.08);
+      border-radius: 12px;
+    }
+    .instructions h2, .attribution h2 {
+      color: #d281ff;
+      font-size: 1.4rem;
+      margin: 0 0 0.8em 0;
+    }
+    .instructions p, .attribution p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      opacity: 0.9;
+      margin: 0 0 0.8em 0;
+    }
+    .instructions ol {
+      margin: 0.5em 0 1em 0;
+      padding-left: 1.5em;
+    }
+    .instructions li {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      opacity: 0.85;
+      margin-bottom: 0.5em;
+    }
+    .instructions a, .attribution a {
+      color: #d281ff;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    .instructions a:hover, .attribution a:hover {
+      color: #c54eff;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(210, 129, 255, 0.25);
+      max-width: 700px;
+      width: 90%;
+      margin: 1.5em auto;
+    }
+    .explanation-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      opacity: 0.85;
+    }
+    @media (max-width: 1000px) {
+      .card-row { gap: 1rem; }
+      .card-slot { width: 180px; height: 140px; }
+    }
+    @media (max-width: 700px) {
+      .card-row { flex-direction: column; gap: 1.2rem; }
+      .card-slot { width: 95vw; max-width: 340px; }
+      .explanations { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-section">
+  <h1>Semillas de Futuros, Cultura de Esperanza</h1>
+  <div class="card-row">
+    <!-- Arco -->
+    <div class="card-slot">
+      <div class="card-inner border-yellow" id="card-arco">
+        <div class="card-label label-yellow">🕒 Arco (A)</div>
+        <div class="card-secondary">En un mundo de</div>
+        <div class="card-content" id="content-arco"></div>
+      </div>
+      <div class="count-remaining" id="count-arco"></div>
+    </div>
+    <!-- Objeto -->
+    <div class="card-slot">
+      <div class="card-inner border-red" id="card-objeto">
+        <div class="card-label label-red">📦 Objeto (O)</div>
+        <div class="card-secondary">existe un(a)</div>
+        <div class="card-content" id="content-objeto"></div>
+      </div>
+      <div class="count-remaining" id="count-objeto"></div>
+    </div>
+    <!-- Ánimo -->
+    <div class="card-slot">
+      <div class="card-inner border-green" id="card-animo">
+        <div class="card-label label-green">🌟 Ánimo (M)</div>
+        <div class="card-secondary">de</div>
+        <div class="card-content" id="content-animo"></div>
+      </div>
+      <div class="count-remaining" id="count-animo"></div>
+    </div>
+    <!-- Terreno -->
+    <div class="card-slot">
+      <div class="card-inner border-blue" id="card-terreno">
+        <div class="card-label label-blue">🌍 Terreno (T)</div>
+        <div class="card-secondary">relacionado(a) con</div>
+        <div class="card-content" id="content-terreno"></div>
+      </div>
+      <div class="count-remaining" id="count-terreno"></div>
+    </div>
+  </div>
+  <div class="controls">
+    <select id="mode-select">
+      <option value="all">Barajar todas las cartas</option>
+      <option value="deck">Sacar cartas de la baraja</option>
+    </select>
+    <button id="play-btn">Jugar</button>
+  </div>
+  </div>
+  <h2 class="explanations-title">Acerca de la tarjeta de Arco (A)</h2>
+  <div class="explanations">
+    <div class="explanation-card">
+      <h3>Arco de Disciplina</h3>
+      <p>Un futuro donde el orden, la estructura y las reglas estrictas son esenciales para mantener la estabilidad. Las sociedades priorizan el control centralizado y la planificación rigurosa para evitar el caos. Aunque se alcanzan metas colectivas, la libertad individual puede quedar restringida en favor del bien común.</p>
+    </div>
+    <div class="explanation-card">
+      <h3>Arco de Colapso</h3>
+      <p>Un escenario donde los sistemas actuales fallan, resultando en una desintegración de las estructuras sociales, económicas y políticas. La humanidad enfrenta desafíos extremos, como el agotamiento de recursos, conflictos y desorganización. La supervivencia se convierte en el eje central, y las comunidades dependen de la resiliencia y adaptabilidad para sostenerse.</p>
+    </div>
+    <div class="explanation-card">
+      <h3>Arco de Transformación</h3>
+      <p>Un futuro marcado por una profunda reinvención de la humanidad. Las tecnologías disruptivas, los cambios culturales y las nuevas concepciones de la realidad generan un cambio radical. Este escenario combina incertidumbre y esperanza, ya que las viejas estructuras son reemplazadas por paradigmas completamente nuevos.</p>
+    </div>
+    <div class="explanation-card">
+      <h3>Arco de Crecimiento</h3>
+      <p>Un futuro optimista donde la humanidad progresa de manera sostenida y equilibrada. Se alcanzan avances tecnológicos, económicos y sociales que mejoran la calidad de vida, respetando los límites del planeta. Este escenario refleja un enfoque armonioso entre el desarrollo humano y el cuidado del planeta.</p>
+    </div>
+  </div>
+  <hr>
+  <section class="instructions">
+    <h2>Instrucciones</h2>
+    <p>
+      <a href="https://www.researchgate.net/publication/364677670_The_Thing_From_The_Future_Print-and-Play_Edition" target="_blank" rel="noopener noreferrer">The Thing From The Future</a>
+      es un juego de imaginación para 1-6 jugadores. El objetivo del juego es usar las cartas para generar las ideas más interesantes, divertidas o que inviten a la reflexión sobre artefactos del futuro. Hay más de 3.9 millones de posibles consignas en la baraja.
+    </p>
+    <ol>
+      <li>Da clic en "Jugar" para componer una consigna creativa a partir de un Arco, un Objeto, un Ánimo y un Terreno.</li>
+      <li>Si la consigna no te parece interesante ni divertida, vuelve a dar clic en "Jugar". Si juegas en grupo, consulta con todas las personas.</li>
+      <li>En una hoja, registra los cuatro elementos de la consigna.</li>
+      <li>En silencio, produce tu propia descripción breve (y un boceto si lo deseas) de tu "cosa del futuro". ¡Esto se vuelve más fácil a medida que tu imaginación se calienta!</li>
+      <li>Si juegas en equipo y cuando estén listos, compartan sus ideas de sus "cosas del futuro" con el grupo.</li>
+    </ol>
+    <p><strong>Opcional:</strong></p>
+    <ol start="6">
+      <li>El creador de la idea favorita del grupo gana un punto. Quien haya acumulado más puntos cuando termine el juego, gana la partida.</li>
+      <li>Comparte tus ideas favoritas con la comunidad del juego usando el hashtag #FutureThing.</li>
+    </ol>
+  </section>
+  <hr>
+  <section class="attribution">
+    <h2>Atribución</h2>
+    <p>
+      Este juego digital está basado en
+      <a href="https://www.researchgate.net/publication/364677670_The_Thing_From_The_Future_Print-and-Play_Edition" target="_blank" rel="noopener noreferrer">The Thing from the Future (Print and Play Edition)</a> de Stuart Candy y Jeff Watson, que se encuentra disponible en ResearchGate para su descarga e impresión bajo una licencia CC-BY-NC-SA. <br>
+      Este juego digital está disponible en este <a href="https://github.com/christiamme/thethingfromthefuture" target="_blank" rel="noopener noreferrer">repositorio de GitHub</a> con el propósito de compartirse de manera no comercial bajo una licencia GPL v3.
+    </p>
+  </section>
+  <footer>
+    <a href="https://fdl.tec.mx" target="_blank" rel="noopener noreferrer">
+      <img src="imgs/logo_fdl.png" alt="Futures Design Lab">
+    </a>
+    <a href="https://eaad.tec.mx" target="_blank" rel="noopener noreferrer">
+      <img src="imgs/logo_eaad.png" alt="Escuela de Arquitectura, Arte y Diseño">
+    </a>
+  </footer>
+  <script>
+    // Card decks
+    const animo = ['Admiración','Alienación','Diversión','Enfado','Ansiedad','Torpeza','Calma','Encanto','Alegría','Satisfacción','Curiosidad','Decadencia','Delicia','Dignidad','Asco','Temor','Vergüenza','Emoción','Euforia','Fascinación','Fervor','Frustración','Gratitud','Felicidad','Hilaridad','Esperanza','Anhelo','Malestar','Melancolía','Melodrama','Nostalgia','Optimismo','Indignación','Patetismo','Placer','Orgullo','Racionalidad','Alivio','Resentimiento','Respeto','Tristeza','Serenidad','Sobrecogimiento','Pena','Sorpresa','Inquietud','Calidez','Rareza','Bienestar','Asombro','Preocupación','Serenidad Zen'];
+    const objeto = ['Anuncio publicitario','Obra de arte','Bebida','Libro','Botella','Caja','Folleto','Edificio','Dulce','Ropa','Corporación','Dispositivo','Documento','Evento','Festival','Bandera','Juego','Regalo','Titular (de periódico)','Implante','Instrumento','Joyería','Kit','Ley','Logotipo','Loción','Máquina','Portada de una revista','Mapa','Máscara','Monumento','Pasaporte','Pastilla','Planta','Postal','Póster','Producto','Prótesis','Anuncio de servicio público','Reliquia','Ritual','Espectáculo','Eslogan','Aperitivo','Canción','Souvenir','Estatua','Calcomanía','Símbolo','Camiseta','Tatuaje','Herramienta','Juguete','Vehículo','Video','Arma'];
+    const terreno = ['Agricultura','El cerebro','Infancia','Ciudadanía','Clase Social','Clima','Clonación','Comunicaciones','Corte Judicial','Enfermedad','Drones','La economía','Educación','Entretenimiento','Medioambiente','Igualdad','Familia','Moda','Vuelo','Bosques','Genética','Género','Gobernanza','Salud','Pasatiempos','Hogar','Identidad','Insectos','Propiedad intelectual','Periodismo','Justicia','Aprendizaje','Memoria','Minería','La Luna','Música','Océanos','Petróleo','Vejez','Mascotas','Poder','Religión','Robots','Sexo','Compras','Espacio','Deportes','Teatro','Viajes','Guerra','Agua','Riqueza','Mujeres','Trabajo','Zombis','El Zoológico'];
+    const arco = ['Crecimiento dentro de unos años','Crecimiento dentro de una década','Crecimiento dentro de una generación','Crecimiento dentro de dos generaciones','Crecimiento dentro de un siglo','Crecimiento dentro de un milenio',
+      'Colapso dentro de unos años','Colapso dentro de una década','Colapso dentro de una generación','Colapso dentro de dos generaciones','Colapso dentro de un siglo','Colapso dentro de un milenio',
+      'Disciplina dentro de unos años','Disciplina dentro de una década','Disciplina dentro de una generación','Disciplina dentro de dos generaciones','Disciplina dentro de un siglo','Disciplina dentro de un milenio',
+      'Transformación dentro de unos años','Transformación dentro de una década','Transformación dentro de una generación','Transformación dentro de dos generaciones','Transformación dentro de un siglo','Transformación dentro de un milenio'];
+
+    // Decks for 'deck' mode
+    let deckAnimo = [], deckObjeto = [], deckTerreno = [], deckArco = [];
+
+    // DOM elements
+    const contentAnimo = document.getElementById('content-animo');
+    const contentObjeto = document.getElementById('content-objeto');
+    const contentTerreno = document.getElementById('content-terreno');
+    const contentArco = document.getElementById('content-arco');
+    const countAnimo = document.getElementById('count-animo');
+    const countObjeto = document.getElementById('count-objeto');
+    const countTerreno = document.getElementById('count-terreno');
+    const countArco = document.getElementById('count-arco');
+    const cardAnimo = document.getElementById('card-animo');
+    const cardObjeto = document.getElementById('card-objeto');
+    const cardTerreno = document.getElementById('card-terreno');
+    const cardArco = document.getElementById('card-arco');
+    const modeSelect = document.getElementById('mode-select');
+    const playBtn = document.getElementById('play-btn');
+
+    // Utility: shuffle array in-place
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    // Initialize deck arrays
+    function resetDecks() {
+      deckAnimo = [...animo];
+      deckObjeto = [...objeto];
+      deckTerreno = [...terreno];
+      deckArco = [...arco];
+      shuffle(deckAnimo);
+      shuffle(deckObjeto);
+      shuffle(deckTerreno);
+      shuffle(deckArco);
+    }
+
+    // Draw a random card from array (without removing)
+    function randomCard(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // Draw and remove a random card from deck, reshuffle if empty
+    function drawFromDeck(deck, fullDeck) {
+      if (deck.length === 0) {
+        // Reshuffle
+        deck.push(...fullDeck);
+        shuffle(deck);
+      }
+      return deck.pop();
+    }
+
+    // Flip animation
+    function flipCard(cardElem, cb) {
+      cardElem.classList.remove('flipped');
+      // Force reflow to restart animation
+      void cardElem.offsetWidth;
+      cardElem.classList.add('flipped');
+      setTimeout(cb, 350);
+      setTimeout(() => cardElem.classList.remove('flipped'), 700);
+    }
+
+    // Update card slot
+    function updateCard(cardElem, contentElem, text) {
+      flipCard(cardElem, () => {
+        contentElem.textContent = text;
+      });
+    }
+
+    // Update remaining counts
+    function updateCounts(mode) {
+      if (mode === 'deck') {
+        countAnimo.textContent = `Cartas restantes: ${deckAnimo.length}`;
+        countObjeto.textContent = `Cartas restantes: ${deckObjeto.length}`;
+        countTerreno.textContent = `Cartas restantes: ${deckTerreno.length}`;
+        countArco.textContent = `Cartas restantes: ${deckArco.length}`;
+      } else {
+        countAnimo.textContent = '';
+        countObjeto.textContent = '';
+        countTerreno.textContent = '';
+        countArco.textContent = '';
+      }
+    }
+
+    // Initial placeholders
+    function setPlaceholders() {
+      contentAnimo.textContent = '';
+      contentObjeto.textContent = '';
+      contentTerreno.textContent = '';
+      contentArco.textContent = '';
+      updateCounts(modeSelect.value);
+    }
+
+    // Main play function
+    function playCards() {
+      const mode = modeSelect.value;
+      if (mode === 'all') {
+        updateCard(cardAnimo, contentAnimo, randomCard(animo));
+        updateCard(cardObjeto, contentObjeto, randomCard(objeto));
+        updateCard(cardTerreno, contentTerreno, randomCard(terreno));
+        updateCard(cardArco, contentArco, randomCard(arco));
+      } else {
+        updateCard(cardAnimo, contentAnimo, drawFromDeck(deckAnimo, animo));
+        updateCard(cardObjeto, contentObjeto, drawFromDeck(deckObjeto, objeto));
+        updateCard(cardTerreno, contentTerreno, drawFromDeck(deckTerreno, terreno));
+        updateCard(cardArco, contentArco, drawFromDeck(deckArco, arco));
+      }
+      updateCounts(mode);
+    }
+
+    // Mode change handler
+    modeSelect.addEventListener('change', () => {
+      if (modeSelect.value === 'deck') {
+        resetDecks();
+      }
+      setPlaceholders();
+    });
+
+    // Button handler
+    playBtn.addEventListener('click', playCards);
+
+    // On load
+    window.addEventListener('DOMContentLoaded', () => {
+      resetDecks();
+      setPlaceholders();
+    });
+  </script>
+</body>
+</html>
