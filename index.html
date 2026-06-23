@@ -29,6 +29,14 @@
       flex-direction: column;
       align-items: center;
     }
+    .tagline {
+      margin: -1.2em 0 2em 0;
+      font-size: 1.1rem;
+      opacity: 0.75;
+      font-style: italic;
+      color: #ffb397;
+      text-align: center;
+    }
     h1 {
       margin-top: 32px;
       margin-bottom: 24px;
@@ -114,14 +122,14 @@
       letter-spacing: 0.5px;
     }
     /* Category colors */
-    .border-green { border-color: #d281ff; }
+    .border-green { border-color: #45aaff; }
     .border-red { border-color: #ff4100; }
-    .border-blue { border-color: #a311ff; }
-    .border-yellow { border-color: #ffb397; }
-    .label-green { color: #d281ff; }
+    .border-blue { border-color: #43e97b; }
+    .border-yellow { border-color: #ffffff; }
+    .label-green { color: #45aaff; }
     .label-red { color: #ff4100; }
-    .label-blue { color: #a311ff; }
-    .label-yellow { color: #ffb397; }
+    .label-blue { color: #43e97b; }
+    .label-yellow { color: #ffffff; }
     /* Button and select */
     .controls {
       display: flex;
@@ -272,13 +280,14 @@
 </head>
 <body>
   <div class="game-section">
-  <h1>Semillas de Futuros, Cultura de Esperanza</h1>
+  <h1>La Cosa del Futuro</h1>
+  <p class="tagline">experiencia lúdica de futuros experienciales</p>
   <div class="card-row">
     <!-- Arco -->
     <div class="card-slot">
       <div class="card-inner border-yellow" id="card-arco">
         <div class="card-label label-yellow">🕒 Arco (A)</div>
-        <div class="card-secondary">En un mundo de</div>
+        <div class="card-secondary">En un futuro de</div>
         <div class="card-content" id="content-arco"></div>
       </div>
       <div class="count-remaining" id="count-arco"></div>
@@ -287,19 +296,10 @@
     <div class="card-slot">
       <div class="card-inner border-red" id="card-objeto">
         <div class="card-label label-red">📦 Objeto (O)</div>
-        <div class="card-secondary">existe un(a)</div>
+        <div class="card-secondary">hay un(a)</div>
         <div class="card-content" id="content-objeto"></div>
       </div>
       <div class="count-remaining" id="count-objeto"></div>
-    </div>
-    <!-- Ánimo -->
-    <div class="card-slot">
-      <div class="card-inner border-green" id="card-animo">
-        <div class="card-label label-green">🌟 Ánimo (M)</div>
-        <div class="card-secondary">de</div>
-        <div class="card-content" id="content-animo"></div>
-      </div>
-      <div class="count-remaining" id="count-animo"></div>
     </div>
     <!-- Terreno -->
     <div class="card-slot">
@@ -309,6 +309,15 @@
         <div class="card-content" id="content-terreno"></div>
       </div>
       <div class="count-remaining" id="count-terreno"></div>
+    </div>
+    <!-- Ánimo -->
+    <div class="card-slot">
+      <div class="card-inner border-green" id="card-animo">
+        <div class="card-label label-green">🌟 Ánimo (M)</div>
+        <div class="card-secondary">en un ambiente de</div>
+        <div class="card-content" id="content-animo"></div>
+      </div>
+      <div class="count-remaining" id="count-animo"></div>
     </div>
   </div>
   <div class="controls">
